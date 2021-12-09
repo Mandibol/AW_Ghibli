@@ -83,6 +83,7 @@ window.onload = () =>{
                     html += `<h2>${specie.name}s</h2>`;
                     html += '<section>'
                     personArray.forEach((person) => {
+                        html += `<div class="box">`
                         html += `<h3>${person.name}</h3>`;
                         html += `<p>`
                         html += `<span>Gender:</span> ${person.gender} <br>`;
@@ -90,6 +91,7 @@ window.onload = () =>{
                         html += `<span>Eye color:</span> ${person.eye_color} <br>`;
                         html += `<span>Hair color:</span> ${person.hair_color} <br>`;
                         html += `</p>`;
+                        html += `</div>`
                     });  
                     html += '</section>'    
                 }
@@ -102,6 +104,7 @@ window.onload = () =>{
                 html += `<h2>Vehicles</h2>`;
                 html += '<section>'
                 vehicleArray.forEach((vehicle) => {
+                    html += `<div class="box">`
                     html += `<h3>${vehicle.name}</h3>`;
                     html += '<p>'
                     html += `<span>Name:</span> ${vehicle.name}<br>`;
@@ -110,6 +113,7 @@ window.onload = () =>{
                     const pilot = peopleArray.find(obj => obj.id === vehicle.pilot.slice(39));
                     html += `<span>Pilot:</span> ${pilot.name}<br>`;
                     html += '</p>'
+                    html += `</div>`
                 });
                 html += '</section>'
             }
@@ -120,6 +124,7 @@ window.onload = () =>{
                 html += `<h2>Locations</h2>`;
                 html += '<section>'
                 locationArray.forEach((location) => {
+                    html += `<div class="box">`
                     html += `<h3>${location.name}</h3>`;
                     html += '<p>'
                     html += `<span>Climate:</span> ${location.climate} <br>`;
@@ -135,6 +140,7 @@ window.onload = () =>{
                         });
                         html += '</p>';
                     }
+                    html += `</div>`
                 });
                 html += '</section>'
             }      
