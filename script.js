@@ -1,6 +1,12 @@
 window.onload = () =>{
     const filmsInput = document.getElementById("filmsInput");
     const filmsOutput = document.getElementById("filmsOutput");
+    const speciesInput = document.getElementById("speciesInput");
+    const hairColorInput = document.getElementById("hairColorInput");
+    const eyeColorInput = document.getElementById("eyeColorInput");
+    const genderInput = document.getElementById("genderInput");
+    const peopleOutput = document.getElementById("peopleOutput");
+
 
     let filmsArray = [];
     let peopleArray = [];
@@ -13,7 +19,7 @@ window.onload = () =>{
     filmReq.open('GET','https://ghibliapi.herokuapp.com/films?limit=250');
     filmReq.onload = () => {
         filmsArray = JSON.parse(filmReq.responseText);
-        let html = `<option value="NaN">Välj en film</option>`; 
+        let html = `<option value="NaN">Choose a film</option>`; 
         for (let i = 0; i < filmsArray.length; i++){
             html += `<option value="${filmsArray[i].id}">${filmsArray[i].title}</option>`;
         }
@@ -28,6 +34,45 @@ window.onload = () =>{
         let temp = (peopleReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
         temp = (temp).replace(/https:\/\/ghibliapi.herokuapp.com\/species\//g,"");
         peopleArray = JSON.parse(temp);
+        //populate hairColorInput
+        const hairColorArray = [];
+        peopleArray.forEach((person) => {
+            if (!hairColorArray.includes(person.hair_color)){
+                hairColorArray.push(person.hair_color);
+            }
+        });
+        let html = `<option value="none">Choose a hair color</option>`; 
+        for (let i = 0; i < hairColorArray.length; i++){
+            html += `<option value="${hairColorArray[i]}">${hairColorArray[i]}</option>`;
+        }
+        hairColorInput.innerHTML = html;
+
+        //populate eyeColorInput
+        const eyeColorArray = [];
+        peopleArray.forEach((person) => {
+            if (!eyeColorArray.includes(person.eye_color)){
+                eyeColorArray.push(person.eye_color);
+            }
+        });
+        html = `<option value="none">Choose a eye color</option>`; 
+        for (let i = 0; i < eyeColorArray.length; i++){
+            html += `<option value="${eyeColorArray[i]}">${eyeColorArray[i]}</option>`;
+        }
+        eyeColorInput.innerHTML = html;
+
+        //populate gender
+        const genderArray = [];
+        peopleArray.forEach((person) => {
+            if (!genderArray.includes(person.gender)){
+                genderArray.push(person.gender);
+            }
+        });
+        html = `<option value="none">Choose a gender</option>`; 
+        for (let i = 0; i < genderArray.length; i++){
+            html += `<option value="${genderArray[i]}">${genderArray[i]}</option>`;
+        }
+        genderInput.innerHTML = html;
+
     };
     peopleReq.send();
 
@@ -36,6 +81,13 @@ window.onload = () =>{
     speciesReq.onload = () => {
         const temp = (speciesReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
         speciesArray = JSON.parse(temp);
+        //populate species input
+        let html = `<option value="none">Choose a specie</option>`; 
+        for (let i = 0; i < speciesArray.length; i++){
+            html += `<option value="${speciesArray[i].id}">${speciesArray[i].name}</option>`;
+        }
+        speciesInput.innerHTML = html;
+        console.log(speciesArray);
     };
     speciesReq.send();
 
@@ -55,6 +107,54 @@ window.onload = () =>{
         vehiclesArray = JSON.parse(temp);
     };
     vehiclesReq.send();
+
+    function sortPeople(){
+        let sortedPeopleArray = peopleArray;
+        if (speciesInput.value !== "none"){
+            sortedPeopleArray = sortedPeopleArray.filter(obj => obj.species === speciesInput.value);            
+        }
+        if (hairColorInput.value !== "none"){
+            sortedPeopleArray = sortedPeopleArray.filter( obj => obj.hair_color === hairColorInput.value);
+        }
+        if (eyeColorInput.value !== "none"){
+            sortedPeopleArray = sortedPeopleArray.filter( obj => obj.eye_color === eyeColorInput.value);
+        }
+        if (genderInput.value !== "none"){
+            sortedPeopleArray = sortedPeopleArray.filter( obj => obj.gender === genderInput.value);
+        }
+
+        //print sortedPeopleArray to html
+        let html = ""
+        sortedPeopleArray.forEach((person) => {
+            const movie = filmsArray.find(obj => obj.id === person.films[0]);
+            const specie = speciesArray.find(obj => obj.id === person.species);
+            html += `<div class="box">`  
+            html += `<h3>${person.name}</h3>`;
+            html += `<p>`
+            html += `<span>Movie:</span> ${movie.title} <br>`;
+            html += `<span>Gender:</span> ${person.gender} <br>`;
+            if (specie !== undefined){
+                html += `<span>Species:</span> ${specie.name} <br>`;    
+            }
+            html += `<span>Age:</span> ${person.age} <br> `;
+            html += `<span>Eye color:</span> ${person.eye_color} <br>`;
+            html += `<span>Hair color:</span> ${person.hair_color} <br>`;
+            html += `</p>`;
+            html += `</div>`            
+        });  
+        peopleOutput.innerHTML = html;
+
+    }
+    speciesInput.addEventListener("input", () => {sortPeople();});
+    hairColorInput.addEventListener("input", () => {sortPeople();});
+    eyeColorInput.addEventListener("input", () => {sortPeople();});
+    genderInput.addEventListener("input", () => {sortPeople();});
+
+    
+
+
+
+
 
     filmsInput.addEventListener("input", () => {
         let html = "";
@@ -83,6 +183,7 @@ window.onload = () =>{
                     html += `<h2>${specie.name}s</h2>`;
                     html += '<section>'
                     personArray.forEach((person) => {
+                        html += `<div class="box">`
                         html += `<h3>${person.name}</h3>`;
                         html += `<p>`
                         html += `<span>Gender:</span> ${person.gender} <br>`;
@@ -90,6 +191,7 @@ window.onload = () =>{
                         html += `<span>Eye color:</span> ${person.eye_color} <br>`;
                         html += `<span>Hair color:</span> ${person.hair_color} <br>`;
                         html += `</p>`;
+                        html += `</div>`
                     });  
                     html += '</section>'    
                 }
@@ -102,6 +204,7 @@ window.onload = () =>{
                 html += `<h2>Vehicles</h2>`;
                 html += '<section>'
                 vehicleArray.forEach((vehicle) => {
+                    html += `<div class="box">`
                     html += `<h3>${vehicle.name}</h3>`;
                     html += '<p>'
                     html += `<span>Name:</span> ${vehicle.name}<br>`;
@@ -110,6 +213,7 @@ window.onload = () =>{
                     const pilot = peopleArray.find(obj => obj.id === vehicle.pilot.slice(39));
                     html += `<span>Pilot:</span> ${pilot.name}<br>`;
                     html += '</p>'
+                    html += `</div>`
                 });
                 html += '</section>'
             }
@@ -120,6 +224,7 @@ window.onload = () =>{
                 html += `<h2>Locations</h2>`;
                 html += '<section>'
                 locationArray.forEach((location) => {
+                    html += `<div class="box">`
                     html += `<h3>${location.name}</h3>`;
                     html += '<p>'
                     html += `<span>Climate:</span> ${location.climate} <br>`;
@@ -135,6 +240,7 @@ window.onload = () =>{
                         });
                         html += '</p>';
                     }
+                    html += `</div>`
                 });
                 html += '</section>'
             }      
