@@ -15,25 +15,33 @@ window.onload = () =>{
     let vehiclesArray = [];
 
     //Create Arrays
+
+    //filmsArray
     const filmReq = new XMLHttpRequest;  
     filmReq.open('GET','https://ghibliapi.herokuapp.com/films?limit=250');
     filmReq.onload = () => {
         filmsArray = JSON.parse(filmReq.responseText);
-        let html = `<option value="NaN">Choose a film</option>`; 
+        let option = document.createElement("option");
+        option.innerHTML = "Choose a film";
+        option.setAttribute("value","none");
+        filmsInput.appendChild(option);
         for (let i = 0; i < filmsArray.length; i++){
-            html += `<option value="${filmsArray[i].id}">${filmsArray[i].title}</option>`;
+            option = document.createElement("option");
+            option.innerHTML = filmsArray[i].title;
+            option.setAttribute("value",filmsArray[i].id);
+            filmsInput.appendChild(option);
         }
-        filmsInput.innerHTML = html;
-        console.log(filmsArray);
     };
     filmReq.send();
 
+    //peopleArray
     const peopleReq = new XMLHttpRequest; 
     peopleReq.open('GET','https://ghibliapi.herokuapp.com/people?limit=250');
     peopleReq.onload = () => {
-        let temp = (peopleReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
-        temp = (temp).replace(/https:\/\/ghibliapi.herokuapp.com\/species\//g,"");
-        peopleArray = JSON.parse(temp);
+        peopleArray = (peopleReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
+        peopleArray = (peopleArray).replace(/https:\/\/ghibliapi.herokuapp.com\/species\//g,"");
+        peopleArray = JSON.parse(peopleArray);
+
         //populate hairColorInput
         const hairColorArray = [];
         peopleArray.forEach((person) => {
@@ -41,11 +49,16 @@ window.onload = () =>{
                 hairColorArray.push(person.hair_color);
             }
         });
-        let html = `<option value="none">Choose a hair color</option>`; 
+        let option = document.createElement("option");
+        option.innerHTML = "Choose a hair";
+        option.setAttribute("value","none");
+        hairColorInput.appendChild(option); 
         for (let i = 0; i < hairColorArray.length; i++){
-            html += `<option value="${hairColorArray[i]}">${hairColorArray[i]}</option>`;
+            option = document.createElement("option");
+            option.innerHTML = hairColorArray[i];
+            option.setAttribute("value",hairColorArray[i]);
+            hairColorInput.appendChild(option); 
         }
-        hairColorInput.innerHTML = html;
 
         //populate eyeColorInput
         const eyeColorArray = [];
@@ -54,61 +67,82 @@ window.onload = () =>{
                 eyeColorArray.push(person.eye_color);
             }
         });
-        html = `<option value="none">Choose a eye color</option>`; 
+        option = document.createElement("option");
+        option.innerHTML = "Choose a eye color";
+        option.setAttribute("value","none");
+        eyeColorInput.appendChild(option); 
         for (let i = 0; i < eyeColorArray.length; i++){
-            html += `<option value="${eyeColorArray[i]}">${eyeColorArray[i]}</option>`;
+            option = document.createElement("option");
+            option.innerHTML = eyeColorArray[i];
+            option.setAttribute("value",eyeColorArray[i]);
+            eyeColorInput.appendChild(option);
         }
-        eyeColorInput.innerHTML = html;
 
-        //populate gender
+        //populate genderInput
         const genderArray = [];
         peopleArray.forEach((person) => {
             if (!genderArray.includes(person.gender)){
                 genderArray.push(person.gender);
             }
         });
+        option = document.createElement("option")
+        option.innerHTML = "Choose a gender";
+        option.setAttribute("value","none");
+        genderInput.appendChild(option); 
         html = `<option value="none">Choose a gender</option>`; 
         for (let i = 0; i < genderArray.length; i++){
-            html += `<option value="${genderArray[i]}">${genderArray[i]}</option>`;
+            option = document.createElement("option")
+            option.innerHTML = genderArray[i];
+            option.setAttribute("value",genderArray[i]);
+            genderInput.appendChild(option);
         }
-        genderInput.innerHTML = html;
-
     };
     peopleReq.send();
 
+    //speciesArray
     const speciesReq = new XMLHttpRequest;  
     speciesReq.open('GET','https://ghibliapi.herokuapp.com/species?limit=250');
     speciesReq.onload = () => {
-        const temp = (speciesReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
-        speciesArray = JSON.parse(temp);
+        speciesArray = (speciesReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
+        speciesArray = JSON.parse(speciesArray);
+
         //populate species input
-        let html = `<option value="none">Choose a specie</option>`; 
+        let option = document.createElement("option")
+        option.innerHTML = "Choose a species";
+        option.setAttribute("value","none");
+        speciesInput.appendChild(option); 
         for (let i = 0; i < speciesArray.length; i++){
-            html += `<option value="${speciesArray[i].id}">${speciesArray[i].name}</option>`;
+            option = document.createElement("option")
+            option.innerHTML = speciesArray[i].name;
+            option.setAttribute("value",speciesArray[i].id);
+            speciesInput.appendChild(option)
         }
-        speciesInput.innerHTML = html;
-        console.log(speciesArray);
     };
     speciesReq.send();
 
+    //locationsArray
     const locationsReq = new XMLHttpRequest;  
     locationsReq.open('GET','https://ghibliapi.herokuapp.com/locations?limit=250');
     locationsReq.onload = () => {
-        let temp = (locationsReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
-        temp = (temp).replace(/https:\/\/ghibliapi.herokuapp.com\/people\//g,"");
-        locationsArray = JSON.parse(temp);
+        locationsArray = (locationsReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
+        locationsArray = (locationsArray).replace(/https:\/\/ghibliapi.herokuapp.com\/people\//g,"");
+        locationsArray = JSON.parse(locationsArray);
     };
     locationsReq.send();
 
+    //vehiclesArray
     const vehiclesReq = new XMLHttpRequest;  
     vehiclesReq.open('GET','https://ghibliapi.herokuapp.com/vehicles?limit=250');
     vehiclesReq.onload = () => {
-        const temp = (vehiclesReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
-        vehiclesArray = JSON.parse(temp);
+        vehiclesArray = (vehiclesReq.responseText).replace(/https:\/\/ghibliapi.herokuapp.com\/films\//g,"");
+        vehiclesArray = JSON.parse(vehiclesArray);
     };
     vehiclesReq.send();
 
+    // Sort by Character
     function sortPeople(){
+        peopleOutput.innerHTML = "";
+        
         let sortedPeopleArray = peopleArray;
         if (speciesInput.value !== "none"){
             sortedPeopleArray = sortedPeopleArray.filter(obj => obj.species === speciesInput.value);            
@@ -122,29 +156,60 @@ window.onload = () =>{
         if (genderInput.value !== "none"){
             sortedPeopleArray = sortedPeopleArray.filter( obj => obj.gender === genderInput.value);
         }
+        printPeopleTable(sortedPeopleArray);
+    }
 
-        //print sortedPeopleArray to html
-        let html = ""
-        sortedPeopleArray.forEach((person) => {
-            const movie = filmsArray.find(obj => obj.id === person.films[0]);
+    function printPeopleTable(array) {
+        //Create Table from sortedPeople Array
+        let personTable = document.createElement("table");
+        personTable.setAttribute("id","personTable");
+        //header
+        let tHead = personTable.createTHead();
+        let row = tHead.insertRow();
+        let cell = row.insertCell();
+        cell.innerHTML = "Name";
+        cell = row.insertCell();
+        cell.innerHTML = "Gender";
+        cell = row.insertCell();
+        cell.innerHTML = "Specie";
+        cell = row.insertCell();
+        cell.innerHTML = "Age";
+        cell = row.insertCell();
+        cell.innerHTML = "Eye Color";
+        cell = row.insertCell();
+        cell.innerHTML = "Hair Color";
+        cell = row.insertCell();
+        cell.innerHTML = "Film";
+
+        let tBody = personTable.createTBody();
+        array.forEach((person) => {
+            const film = filmsArray.find(obj => obj.id === person.films[0]);
             const specie = speciesArray.find(obj => obj.id === person.species);
-            html += `<div class="box">`  
-            html += `<h3>${person.name}</h3>`;
-            html += `<p>`
-            html += `<span>Movie:</span> ${movie.title} <br>`;
-            html += `<span>Gender:</span> ${person.gender} <br>`;
-            if (specie !== undefined){
-                html += `<span>Species:</span> ${specie.name} <br>`;    
-            }
-            html += `<span>Age:</span> ${person.age} <br> `;
-            html += `<span>Eye color:</span> ${person.eye_color} <br>`;
-            html += `<span>Hair color:</span> ${person.hair_color} <br>`;
-            html += `</p>`;
-            html += `</div>`            
-        });  
-        peopleOutput.innerHTML = html;
+            row = tBody.insertRow();
+            row.addEventListener("click", () => {
+                filmsInput.value = film.id;
+                filmsInput.dispatchEvent(new Event('input'));
+            });
+            cell = row.insertCell();
+            cell.innerHTML = person.name;
+            cell = row.insertCell();
+            cell.innerHTML = person.gender;
+            cell = row.insertCell();
+            cell.innerHTML = specie !== undefined ? specie.name:"N/A";
+            cell = row.insertCell();
+            cell.innerHTML = person.age.replace("Unspecified/","");
+            cell = row.insertCell();
+            cell.innerHTML = person.eye_color;
+            cell = row.insertCell();
+            cell.innerHTML = person.hair_color;
+            cell = row.insertCell();
+            cell.innerHTML = film.title;
+        });
+
+        peopleOutput.appendChild(personTable);
 
     }
+
     speciesInput.addEventListener("input", () => {sortPeople();});
     hairColorInput.addEventListener("input", () => {sortPeople();});
     eyeColorInput.addEventListener("input", () => {sortPeople();});
@@ -152,104 +217,187 @@ window.onload = () =>{
 
     
 
-
-
-
-
+    //Display film information
     filmsInput.addEventListener("input", () => {
-        let html = "";
-        if (filmsInput.value !== "NaN"){
+        filmsOutput.innerHTML = "";
+        if (filmsInput.value !== "none"){
             const filmObj = filmsArray.find(obj => obj.id === filmsInput.value);
-            html += `<img src="${filmObj.movie_banner}" alt="movieposter">`;
-            html += `<h2>${filmObj.title}</h2>`;
-            html += `<section id="description">`;
-            html += `<img style="float:right; width:30%; margin-left: 8px;" src="${filmObj.image}" alt="movieposter">`;
-            html += `<p><span>Orginal title:</span> ${filmObj.original_title}</p>`;
-            html += `<p><span>Orginal title romanised:</span>  ${filmObj.original_title_romanised}</p>`;
-            html += `<p><span>Release Date:</span>  ${filmObj.release_date}</p>`;
-            html += `<p><span>Director:</span>  ${filmObj.director}</p>`;
-            html += `<p><span>Producer:</span>  ${filmObj.producer}</p>`;
-            html += `<p><span>Running Time:</span>  ${filmObj.running_time} minutes</p>`;
-            html += `<p><span>Rotten Tomate Score:</span>  ${filmObj.rt_score}</p>`
-            html += `<p><span>Description:</span>  ${filmObj.description}</p>`;
-            html += `</section>`;      
+            let banner = document.createElement("img")
+            banner.setAttribute("src", filmObj.movie_banner);
+            banner.setAttribute("alt", "movieposter");
+            filmsOutput.appendChild(banner);
+            let table = document.createElement("table");
+            //Header
+            let row = table.insertRow();
+            let cell = row.insertCell();
+            cell.setAttribute("colspan",2);
+            cell.innerHTML = `<h2>${filmObj.title}</h2>`;
+            //Info
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Orginal title:</span> ${filmObj.original_title}</p>`;
+            cell = row.insertCell();
+            cell.setAttribute("rowspan",7)
+            cell.setAttribute("width","7em")
+            cell.innerHTML = `<img style="width: 10em" src="${filmObj.image}" alt="movieposter">`;
 
-            //Lista species
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Orginal title romanised:</span>  ${filmObj.original_title_romanised}</p>`;
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Release Date:</span>  ${filmObj.release_date}</p>`;
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Director:</span>  ${filmObj.director}</p>`;
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Producer:</span>  ${filmObj.producer}</p>`;
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Running Time:</span>  ${filmObj.running_time} minutes</p>`;
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.innerHTML = `<p><span>Rotten Tomate Score:</span>  ${filmObj.rt_score}</p>`
+
+            row = table.insertRow();
+            cell = row.insertCell();
+            cell.setAttribute("colspan",2);
+            cell.innerHTML = `<p><span>Description:</span>  ${filmObj.description}</p>`;
+            filmsOutput.appendChild(table); 
+
+            //List species and characters
             const specieArray = speciesArray.filter( obj => obj.films.includes(filmsInput.value));
             specieArray.forEach((specie) => {
                 const temp = peopleArray.filter( obj => obj.films.includes(filmsInput.value));
                 const personArray = temp.filter( obj => obj.species.includes(specie.id));
+
                 if (personArray[0]) {
-                    html += `<h2>${specie.name}s</h2>`;
-                    html += '<section>'
+                    details = document.createElement("details");
+                    details.innerHTML += `<summary>${specie.name}s</summary>`;
+                    filmsOutput.appendChild(details);
+
+                    let table = document.createElement("table");
+                    //header
+                    let tHead = table.createTHead();
+                    let row = tHead.insertRow();
+                    let cell = row.insertCell();
+                    cell.innerHTML = "Name";
+                    cell = row.insertCell();
+                    cell.innerHTML = "Gender";
+                    cell = row.insertCell();
+                    cell.innerHTML = "Age";
+                    cell = row.insertCell();
+                    cell.innerHTML = "Eye Color";
+                    cell = row.insertCell();
+                    cell.innerHTML = "Hair Color";
+                    let tBody = table.createTBody();
+
                     personArray.forEach((person) => {
-                        html += `<div class="box">`
-                        html += `<h3>${person.name}</h3>`;
-                        html += `<p>`
-                        html += `<span>Gender:</span> ${person.gender} <br>`;
-                        html += `<span>Age:</span> ${person.age} <br> `;
-                        html += `<span>Eye color:</span> ${person.eye_color} <br>`;
-                        html += `<span>Hair color:</span> ${person.hair_color} <br>`;
-                        html += `</p>`;
-                        html += `</div>`
+                        row = tBody.insertRow();
+                        cell = row.insertCell();
+                        cell.innerHTML = person.name;
+                        cell = row.insertCell();
+                        cell.innerHTML = person.gender;
+                        cell = row.insertCell();
+                        cell.innerHTML = person.age.replace("Unspecified/","");
+                        cell = row.insertCell();
+                        cell.innerHTML = person.eye_color;
+                        cell = row.insertCell();
+                        cell.innerHTML = person.hair_color;
                     });  
-                    html += '</section>'    
-                }
-                
+                    details.appendChild(table);  
+                }   
             });
 
-            //Lista Fordon
+            //List Fordon
             const vehicleArray = vehiclesArray.filter( obj => obj.films.includes(filmsInput.value));
             if (vehicleArray[0]) {
-                html += `<h2>Vehicles</h2>`;
-                html += '<section>'
+                details = document.createElement("details");
+                details.innerHTML += `<summary>Vehicles</summary>`;
+                filmsOutput.appendChild(details);
+
+                let table = document.createElement("table");
+                //header
+                let tHead = table.createTHead();
+                let row = tHead.insertRow();
+                let cell = row.insertCell();
+                cell.innerHTML = "Name";
+                cell = row.insertCell();
+                cell.innerHTML = "Class";
+                cell = row.insertCell();
+                cell.innerHTML = "Length";
+                cell = row.insertCell();
+                cell.innerHTML = "Pilot";
+                let tBody = table.createTBody();
+
                 vehicleArray.forEach((vehicle) => {
-                    html += `<div class="box">`
-                    html += `<h3>${vehicle.name}</h3>`;
-                    html += '<p>'
-                    html += `<span>Name:</span> ${vehicle.name}<br>`;
-                    html += `<span>Class:</span> ${vehicle.vehicle_class}<br>`;
-                    html += `<span>length:</span> ${vehicle.length}<br>`;
+                    row = tBody.insertRow();
+                    cell = row.insertCell();
+                    cell.innerHTML = vehicle.name;
+                    cell = row.insertCell();
+                    cell.innerHTML = vehicle.vehicle_class;
+                    cell = row.insertCell();
+                    cell.innerHTML = vehicle.length;
+                    cell = row.insertCell();
                     const pilot = peopleArray.find(obj => obj.id === vehicle.pilot.slice(39));
-                    html += `<span>Pilot:</span> ${pilot.name}<br>`;
-                    html += '</p>'
-                    html += `</div>`
-                });
-                html += '</section>'
-            }
+                    cell.innerHTML = pilot.name;
+                });  
+                details.appendChild(table);  
+            }  
             
-            //Lista Platser
+            
+            //List Platser
             const locationArray = locationsArray.filter( obj => obj.films.includes(filmsInput.value));
             if (locationArray[0]) {
-                html += `<h2>Locations</h2>`;
-                html += '<section>'
+                details = document.createElement("details");
+                details.innerHTML += `<summary>Locations</summary>`;
+                filmsOutput.appendChild(details);
+
+                let table = document.createElement("table");
+                //header
+                let tHead = table.createTHead();
+                let row = tHead.insertRow();
+                let cell = row.insertCell();
+                cell.innerHTML = "Name";
+                cell = row.insertCell();
+                cell.innerHTML = "Climate";
+                cell = row.insertCell();
+                cell.innerHTML = "Terrain";
+                cell = row.insertCell();
+                cell.innerHTML = "Surface Water";
+                cell = row.insertCell();
+                cell.innerHTML = "Residents";
+                let tBody = table.createTBody();
+
                 locationArray.forEach((location) => {
-                    html += `<div class="box">`
-                    html += `<h3>${location.name}</h3>`;
-                    html += '<p>'
-                    html += `<span>Climate:</span> ${location.climate} <br>`;
-                    html += `<span>Terrain:</span> ${location.terrain} <br>`;
-                    html += `<span>Surface Water:</span> ${location.surface_water}`;
-                    html += '</p>'
+                    row = tBody.insertRow();
+                    cell = row.insertCell();
+                    cell.innerHTML = location.name;
+                    cell = row.insertCell();
+                    cell.innerHTML = location.climate;
+                    cell = row.insertCell();
+                    cell.innerHTML = location.terrain;
+                    cell = row.insertCell();
+                    cell.innerHTML = location.surface_water;
+                    cell = row.insertCell();
                     if (location.residents[0] !== "TODO") {
-                        html += '<h4>Residents:</h4>'
-                        html += '<p>'
+                        let html = '';
                         location.residents.forEach((resident) => {
                             const person = peopleArray.find(obj => obj.id === resident);
-                            if (person) html += `${person.name}<br>`;
+                            if (person) html += `${person.name}, `;
                         });
                         html += '</p>';
+                        cell.innerHTML = html;
                     }
-                    html += `</div>`
-                });
-                html += '</section>'
+                });    
+                details.appendChild(table);  
             }      
         }
-        filmsOutput.innerHTML = html;
-        //Gör slidetogglar alla element som följer en h2 rubrik när du trycker på den
-        $("h2").click(function(){
-        $(this).next("section").slideToggle("slow");
-        $("#description").css("display", "block");
-    });
     });
 };

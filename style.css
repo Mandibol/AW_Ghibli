@@ -3,6 +3,24 @@
     font-family: Arial, Helvetica, sans-serif;
     font-display: block;
 }
+table {
+    border: 1pt solid cadetblue;
+    border-collapse: collapse;
+    width: 100%;
+}
+thead {
+    font-weight: bold;
+    color: white;
+    background-color: cadetblue;
+}
+tr:nth-child(even) {
+    background-color: rgba(95, 158, 160, 0.486);
+}
+#personTable tr:hover {
+    background-color: darkcyan;
+    color:darkorange;
+    cursor: pointer;
+}
 
 html, body {
     margin: 0;
@@ -10,18 +28,19 @@ html, body {
     height: 100%;
 }
 
-h2 {
+summary, h2 {
     margin:0;
     padding:4px;
     background-color: cadetblue;
     color: white;
-    display: block;
-    clear: both;
+    font-size: larger;
+    font-weight: bold;
 }
 
-h2:hover {
+summary:hover {
     color:darkorange;
     cursor: pointer;
+    background-color: darkcyan;
 }
 
 section:after{
@@ -123,7 +142,7 @@ body {
         ;
     }
 
-    .box {
+    .box, .box25 {
         width: 100%;
     }
 }
